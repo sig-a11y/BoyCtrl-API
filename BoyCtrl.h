@@ -18,8 +18,12 @@ typedef enum
 
 
 // 初始化接口
-// logPath: 日志输出路径，NULL或为空=无日志输出
+// logPath: 日志输出路径，UTF-16le编码，NULL或空字符串=无日志输出
 BoyCtrlError __stdcall BoyCtrlInitialize(const wchar_t* logPath);
+
+// 初始化接口
+// logPath: 日志输出路径，UTF-8编码，NULL或空字符串=无日志输出
+BoyCtrlError __stdcall BoyCtrlInitializeU8(const char* logPath);
 
 // 朗读文本
 // text: 朗读的文本，UTF-16le编码
