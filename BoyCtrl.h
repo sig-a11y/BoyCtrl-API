@@ -58,5 +58,9 @@ BoyCtrlError __stdcall BoyCtrlSpeakU8(const char* text, bool withSlave, bool app
 // withSlave: false=停止读屏通道，true=停止独立通道
 BoyCtrlError __stdcall BoyCtrlStopSpeaking(bool withSlave);
 
+// 暂停指定时间的读屏朗读
+// ms: 暂停时间，单位毫秒，10~10000ms
+BoyCtrlError __stdcall BoyCtrlPauseScreenReader(int ms);
+
 // 退出清理
 void __stdcall BoyCtrlUninitialize();
