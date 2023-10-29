@@ -22,6 +22,10 @@ typedef enum
 BoyCtrlError __stdcall BoyCtrlInitialize(const wchar_t* logPath);
 
 // 初始化接口
+// logPath: 日志输出路径，ANSI编码，NULL或空字符串=无日志输出
+BoyCtrlError __stdcall BoyCtrlInitializeAnsi(const char* logPath);
+
+// 初始化接口
 // logPath: 日志输出路径，UTF-8编码，NULL或空字符串=无日志输出
 BoyCtrlError __stdcall BoyCtrlInitializeU8(const char* logPath);
 
@@ -31,6 +35,13 @@ BoyCtrlError __stdcall BoyCtrlInitializeU8(const char* logPath);
 // append: 是否排队朗读
 // onCompletion: 朗读完成回调，NULL=完成不需要通知，当使用读屏语音时该参数忽略
 BoyCtrlError __stdcall BoyCtrlSpeak(const wchar_t* text, bool withSlave, bool append, BoyCtrlSpeakCompleteFunc onCompletion);
+
+// 朗读文本(ANSI)
+// text: 朗读的文本，ANSI编码
+// withSlave: false=使用读屏语音，true=使用独立语音
+// append: 是否排队朗读
+// onCompletion: 朗读完成回调，NULL=完成不需要通知，当使用读屏语音时该参数忽略
+BoyCtrlError __stdcall BoyCtrlSpeakAnsi(const char* text, bool withSlave, bool append, BoyCtrlSpeakCompleteFunc onCompletion);
 
 // 朗读文本(UTF-8)
 // text: 朗读的文本，UTF-8编码
