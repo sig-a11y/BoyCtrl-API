@@ -67,3 +67,6 @@ void __stdcall BoyCtrlUninitialize();
 
 // 读屏是否正在运行，必须成功初始化才能使用此接口
 bool __stdcall BoyCtrlIsReaderRunning();
+
+// 验证
+bool __stdcall BoyCtrlVerify(const char* key);
