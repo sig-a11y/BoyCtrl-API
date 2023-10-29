@@ -22,11 +22,18 @@ typedef enum
 BoyCtrlError __stdcall BoyCtrlInitialize(const wchar_t* logPath);
 
 // 朗读文本
-// text: 朗读的文本
+// text: 朗读的文本，UTF-16le编码
 // withSlave: false=使用读屏语音，true=使用独立语音
 // append: 是否排队朗读
 // onCompletion: 朗读完成回调，NULL=完成不需要通知，当使用读屏语音时该参数忽略
 BoyCtrlError __stdcall BoyCtrlSpeak(const wchar_t* text, bool withSlave, bool append, BoyCtrlSpeakCompleteFunc onCompletion);
+
+// 朗读文本(UTF-8)
+// text: 朗读的文本，UTF-8编码
+// withSlave: false=使用读屏语音，true=使用独立语音
+// append: 是否排队朗读
+// onCompletion: 朗读完成回调，NULL=完成不需要通知，当使用读屏语音时该参数忽略
+BoyCtrlError __stdcall BoyCtrlSpeakU8(const char* text, bool withSlave, bool append, BoyCtrlSpeakCompleteFunc onCompletion);
 
 // 停止朗读
 // withSlave: false=停止读屏语音，true=停止独立语音

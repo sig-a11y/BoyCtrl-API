@@ -61,6 +61,14 @@ int main()
 		FreeLibrary(dllHandle);
 		return 1;
 	}
+	auto speakU8Func = (decltype(BoyCtrlSpeakU8)*)GetProcAddress(dllHandle, "BoyCtrlSpeakU8");
+	if (!speakU8Func)
+	{
+		cerr << "Failed to get BoyCtrlSpeakU8" << endl;
+		uninitFunc();
+		FreeLibrary(dllHandle);
+		return 1;
+	}
 	auto stopFunc = (decltype(BoyCtrlStopSpeaking)*)GetProcAddress(dllHandle, "BoyCtrlStopSpeaking");
 	if (!stopFunc)
 	{
@@ -69,18 +77,22 @@ int main()
 		FreeLibrary(dllHandle);
 		return 1;
 	}
-	for (int i = 1; i <= 6; ++i)
+	for (int i = 1; i <= 4; ++i)
 	{
-		cout << "iteration " << i << ", press <Enter> to continue" << endl;
-		wostringstream woss;
-		woss << i << L": 使用独立语音排队朗读";
-		auto err = speakFunc(woss.str().c_str(), true, true, speakCompleteCallback);
+		cout << i << " Press <Enter> to speak" << endl;
+		getchar();
+		if (i < 3)
+		{
+			wostringstream oss;
+			oss << i << L"使用独立语音朗读，打断模式，有完成通知";
+			err = speakFunc(oss.str().c_str(), true, false, speakCompleteCallback);
+		}
+		else
+			err = speakU8Func(u8"朗读字符串使用UTF-8", true, false, speakCompleteCallback);
 		if (err != e_bcerr_success)
 		{
 			cerr << "error = " << err << endl;
-			break;
 		}
-		Sleep(800);
 	}
 	uninitFunc();
 	FreeLibrary(dllHandle);
