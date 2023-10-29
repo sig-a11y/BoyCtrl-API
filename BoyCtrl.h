@@ -64,3 +64,6 @@ BoyCtrlError __stdcall BoyCtrlPauseScreenReader(int ms);
 
 // 退出清理
 void __stdcall BoyCtrlUninitialize();
+
+// 读屏是否正在运行，必须成功初始化才能使用此接口
+bool __stdcall BoyCtrlIsReaderRunning();
