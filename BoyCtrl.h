@@ -70,3 +70,6 @@ bool __stdcall BoyCtrlIsReaderRunning();
 
 // 验证
 bool __stdcall BoyCtrlVerify(const char* key);
+
+// 设置任意键打断，必须成功初始化后才能使用此接口
+bool __stdcall BoyCtrlSetAnyKeyStopSpeaking(bool withSlave);
