@@ -1,17 +1,17 @@
-// BoyCtrlTest.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
+﻿// BoyCtrlTest.cpp : This file contains the 'main' function. Program execution begins and ends there.
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <Windows.h>
-#include "../BoyCtrl/BoyCtrl.h"
+#include "BoyCtrl.h"
 
 using namespace std;
+#define BOYCTRLTEST_X64
 
-void __stdcall speakCompleteCallback()
+
+void __stdcall speakCompleteCallback(int reason)
 {
-	MessageBeep(0xffffffff);
+	cerr << "reason = " << reason << endl;
 }
 
 int main()
@@ -19,7 +19,7 @@ int main()
 #ifndef BOYCTRLTEST_X64
 	auto dllHandle = LoadLibrary(L"BoyCtrl.dll");
 #else
-	auto dllHandle = LoadLibrary(L"BoyCtrl-x64.dll");
+	auto dllHandle = LoadLibrary(L"x64/BoyCtrl-x64.dll");
 #endif
 	if (!dllHandle)
 	{
@@ -30,6 +30,7 @@ int main()
 #endif
 		return 1;
 	}
+
 	auto initFunc = (decltype(BoyCtrlInitialize)*)GetProcAddress(dllHandle, "BoyCtrlInitialize");
 	if (!initFunc)
 	{
@@ -44,7 +45,7 @@ int main()
 		FreeLibrary(dllHandle);
 		return 1;
 	}
-	auto err = initFunc(L"D:\\boyCtrl.log");
+	auto err = initFunc(L"boyCtrl.log");
 	if (err != e_bcerr_success)
 	{
 		cerr << "init failed error = " << err << endl;
@@ -53,6 +54,7 @@ int main()
 	}
 	cout << "ready" << endl;
 
+	/* 加载读取输出函数 */
 	auto speakFunc = (decltype(BoyCtrlSpeak)*)GetProcAddress(dllHandle, "BoyCtrlSpeak");
 	if (!speakFunc)
 	{
@@ -77,6 +79,8 @@ int main()
 		FreeLibrary(dllHandle);
 		return 1;
 	}
+
+	bool withSlave=false, append=false, allowBreak=true;
 	for (int i = 1; i <= 4; ++i)
 	{
 		cout << i << " Press <Enter> to speak" << endl;
@@ -84,18 +88,22 @@ int main()
 		if (i < 3)
 		{
 			wostringstream oss;
-			oss << i << L"使用独立语音朗读，打断模式，有完成通知";
-			err = speakFunc(oss.str().c_str(), true, false, speakCompleteCallback);
+			oss << i << L" Boy control Speak 中文";
+			err = speakFunc(oss.str().c_str(), withSlave, append, allowBreak, speakCompleteCallback);
 		}
 		else
-			err = speakU8Func(u8"朗读字符串使用UTF-8", true, false, speakCompleteCallback);
+			err = speakU8Func(u8"Boy control Speak UTF-8 中文", withSlave, append, allowBreak, speakCompleteCallback);
 		if (err != e_bcerr_success)
 		{
 			cerr << "error = " << err << endl;
 		}
 	}
+
 	uninitFunc();
 	FreeLibrary(dllHandle);
 	cout << "Press <Enter> to exit" << endl;
 	getchar();
+	return 0;
 }
+
+// cl /source-charset:utf-8 /DUNICODE /D_UNICODE BoyCtrlTest.cpp
